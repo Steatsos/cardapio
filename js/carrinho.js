@@ -57,29 +57,78 @@ if (e.target.id === "carrinhoModal") e.target.style.display = "none";
 // include product id in messages and provide send via email
 function formatOrderLines(){
 	return CARRINHO.map(p => {
-		const sizeLabel = p.tamanho? ` - ${p.tamanho.toUpperCase()}` : '';
+		const isJr = p.tamanho && String(p.tamanho).toLowerCase() === 'jr';
+		const sizeLabel = isJr ? ' - Jr' : ''; // omit 'Grande' (default)
 		const obs = p.observacoes? ` - Obs: ${p.observacoes}` : '';
-		const adds = Array.isArray(p.acrescimos) && p.acrescimos.length? ` - Acresc: ${p.acrescimos.map(a=>a.nome).join(',')}` : '';
-		return `ID:${p.id} - ${p.nome}${sizeLabel}${adds}${obs} - R$ ${p.preco.toFixed(2)}`;
+		const adds = Array.isArray(p.acrescimos) && p.acrescimos.length ? ` - Com ${p.acrescimos.map(a=>a.nome).join(', ')}` : '';
+		return `${p.nome}${sizeLabel}${adds}${obs} - R$ ${Number(p.preco).toFixed(2)}`;
 	});
 }
 
-document.getElementById("enviarZap").onclick = () => {
-	if(!CARRINHO || CARRINHO.length === 0){ alert('Carrinho vazio'); return; }
-	const lines = formatOrderLines();
-	const texto = encodeURIComponent(['Pedido:', ...lines, '', `Total: R$ ${CARRINHO.reduce((s,i)=>s+i.preco,0).toFixed(2)}`].join('\n'));
-	const url = `https://wa.me/5516988087678?text=${texto}`;
-	window.open(url, '_blank');
-};
+// Open order-details modal to collect customer data, then send WhatsApp
+const btnEnviarZap = document.getElementById("enviarZap");
+if(btnEnviarZap){
+	btnEnviarZap.addEventListener('click', ()=>{
+		if(!CARRINHO || CARRINHO.length === 0){ alert('Carrinho vazio'); return; }
+		const orderModal = document.getElementById('orderModal');
+		if(!orderModal) return alert('Modal de pedido não encontrado');
+		// try to prefill from saved info
+		try{
+			const saved = JSON.parse(localStorage.getItem('orderInfo')||'null');
+			if(saved){
+				document.getElementById('orderName').value = saved.name || '';
+				document.getElementById('orderAddress').value = saved.address || '';
+				document.getElementById('orderBairro').value = saved.bairro || '';
+				document.getElementById('orderPonto').value = saved.ponto || '';
+			}
+		}catch(e){}
+		orderModal.style.display = 'flex';
+		const nameInput = document.getElementById('orderName');
+		if(nameInput) nameInput.focus();
+	});
+}
 
-document.getElementById('enviarEmail').onclick = () => {
-	if(!CARRINHO || CARRINHO.length === 0){ alert('Carrinho vazio'); return; }
-	const lines = formatOrderLines();
-	const subject = encodeURIComponent('Pedido - Cardápio');
-	const body = encodeURIComponent(['Pedido:', ...lines, '', `Total: R$ ${CARRINHO.reduce((s,i)=>s+i.preco,0).toFixed(2)}`, '', 'Envie seus dados de entrega aqui:'].join('\n'));
-	const mailto = `mailto:vla.eleut@gmail.com?subject=${subject}&body=${body}`;
-	window.location.href = mailto;
-};
+// Order modal handlers
+const orderModal = document.getElementById('orderModal');
+if(orderModal){
+	const orderBackdrop = document.getElementById('orderModalBackdrop');
+	const closeBtn = document.getElementById('closeOrderModal');
+	const cancelBtn = document.getElementById('orderCancel');
+	const sendBtn = document.getElementById('orderSendWhats');
+
+	const hideOrderModal = ()=> orderModal.style.display = 'none';
+	if(orderBackdrop) orderBackdrop.addEventListener('click', hideOrderModal);
+	if(closeBtn) closeBtn.addEventListener('click', hideOrderModal);
+	if(cancelBtn) cancelBtn.addEventListener('click', hideOrderModal);
+
+	if(sendBtn) sendBtn.addEventListener('click', ()=>{
+		if(!CARRINHO || CARRINHO.length === 0){ alert('Carrinho vazio'); return; }
+		const name = (document.getElementById('orderName').value || '').trim();
+		const address = (document.getElementById('orderAddress').value || '').trim();
+		const bairro = (document.getElementById('orderBairro').value || '').trim();
+		const ponto = (document.getElementById('orderPonto').value || '').trim();
+		if(!name || !address){ alert('Por favor informe seu nome e endereço.'); return; }
+
+		// save for next time
+		try{ localStorage.setItem('orderInfo', JSON.stringify({name,address,bairro,ponto})); }catch(e){}
+
+		const lines = formatOrderLines();
+		const total = `Total: R$ ${CARRINHO.reduce((s,i)=>s+Number(i.preco),0).toFixed(2)}`;
+		const header = `Pedido - ${name}`;
+		const footer = [`Endereço: ${address}`, `Bairro: ${bairro}`, `Ponto de referência: ${ponto}`];
+		const payload = [header, ...lines, '', total, '', ...footer].join('\n');
+		const texto = encodeURIComponent(payload);
+		const url = `https://wa.me/5516996202763?text=${texto}`;
+		hideOrderModal();
+		window.open(url, '_blank');
+	});
+}
+
+// email button removed from UI; guard in case element exists
+const btnEnviarEmail = document.getElementById('enviarEmail');
+if(btnEnviarEmail){
+	btnEnviarEmail.style.display = 'none';
+}
 
 // Limpar carrinho
 function limparCarrinho(){
@@ -116,7 +165,7 @@ if(btnContactWhats) btnContactWhats.addEventListener('click', ()=>{
 	const name = document.getElementById('contactName').value || '';
 	const msg = document.getElementById('contactMessage').value || '';
 	const texto = encodeURIComponent(`Contato: ${name}\n\n${msg}`);
-	window.open(`https://wa.me/5516988087678?text=${texto}`, '_blank');
+	window.open(`https://wa.me/5516996202763?text=${texto}`, '_blank');
 });
 
 // inicializa UI

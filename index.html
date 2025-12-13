@@ -23,8 +23,8 @@
 		<!-- Fale conosco section -->
 		<div style="margin-top:16px;border-top:1px solid #eee;padding-top:12px">
 			<h4 style="margin:0 0 8px 0">Fale conosco</h4>
-			<p style="margin:0 0 8px 0;font-size:13px;color:#555">Dúvidas? Envie uma mensagem ou email.</p>
-			<button id="openContact" class="sidebar-contact-btn" style="padding:8px 10px;border-radius:6px;border:0;background:var(--brand-mid);color:#fff">Contato</button>
+			<p style="margin:0 0 8px 0;font-size:13px;color:#555">Dúvidas? Entre em contato pelo WhatsApp.</p>
+			<a id="openWhatsLink" href="https://wa.me/5516996202763?text=Ol%C3%A1%2C%20gostaria%20de%20informa%C3%A7%C3%B5es" target="_blank" class="sidebar-contact-btn" style="display:inline-block;padding:8px 10px;border-radius:6px;border:0;background:var(--brand-mid);color:#fff;text-decoration:none">Contato</a>
 		</div>
 	</div>
 </aside>
@@ -62,9 +62,8 @@
 <h2>Seu Carrinho</h2>
 <ul id="listaCarrinho"></ul>
 <div style="display:flex;gap:8px;margin-top:10px">
-		<button id="enviarZap" style="padding:8px 12px;border-radius:6px;border:0;background:#25d366;color:#fff">Enviar WhatsApp</button>
-		<button id="enviarEmail" style="padding:8px 12px;border-radius:6px;border:0;background:#333;color:#fff">Enviar por Email</button>
-		<button id="limparCarrinho" style="background:#e53e3e;color:#fff;border:none;padding:8px;border-radius:6px;">Limpar</button>
+	<button id="enviarZap" style="padding:8px 12px;border-radius:6px;border:0;background:#25d366;color:#fff">Enviar pedido</button>
+	<button id="limparCarrinho" style="background:#e53e3e;color:#fff;border:none;padding:8px;border-radius:6px;">Limpar</button>
 </div>
 </div>
 </div>
@@ -83,11 +82,33 @@
 			<label>Mensagem<br><textarea id="contactMessage" rows="4" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></textarea></label>
 		</div>
 		<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
-			<button id="contactSendEmail" style="padding:8px 12px;border-radius:6px;border:0;background:#333;color:#fff">Enviar por Email</button>
-			<button id="contactSendWhatsApp" style="padding:8px 12px;border-radius:6px;border:0;background:#25d366;color:#fff">Enviar por WhatsApp</button>
+			<button id="contactSendWhatsApp" style="padding:8px 12px;border-radius:6px;border:0;background:#25d366;color:#fff">Enviar</button>
 		</div>
 	</div>
 </div>
+
+		<!-- ORDER DETAILS MODAL (collects customer data before sending WhatsApp) -->
+		<div id="orderModal" class="color-modal" role="dialog" aria-hidden="true" style="display:none">
+			<div class="color-modal-backdrop" id="orderModalBackdrop"></div>
+			<div class="color-modal-content" role="document">
+				<button id="closeOrderModal" aria-label="Fechar">✕</button>
+				<h3 style="margin-top:0">Dados para entrega</h3>
+				<div style="margin-top:8px">
+					<label>Nome<br><input id="orderName" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
+				</div>
+				<div style="margin-top:8px">
+					<label>Endereço<br><input id="orderAddress" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
+				</div>
+				<div style="margin-top:8px;display:flex;gap:8px">
+					<label style="flex:1">Bairro<br><input id="orderBairro" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
+					<label style="flex:1">Ponto de referência<br><input id="orderPonto" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
+				</div>
+				<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+					<button id="orderCancel" style="padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:transparent">Cancelar</button>
+					<button id="orderSendWhats" style="padding:8px 12px;border-radius:6px;border:0;background:#25d366;color:#fff">Enviar pedido</button>
+				</div>
+			</div>
+		</div>
 
 
 <script src="js/produtos.js"></script>
