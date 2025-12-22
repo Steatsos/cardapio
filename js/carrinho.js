@@ -22,6 +22,8 @@ function addCarrinho(prod, options) {
 	const obsNote = item.observacoes? ` — ${item.observacoes}` : '';
 	alert(prod.nome + obsText + obsNote + ' adicionado ao pedido');
 	atualizarCarrinhoUI();
+		// update modal total if visible
+		if(document.getElementById('orderModal') && document.getElementById('orderModal').style.display === 'flex') updateOrderTotalUI();
 }
 
 
@@ -38,6 +40,8 @@ if(!CARRINHO || CARRINHO.length === 0){
 			return `<li>${p.nome}${sizeLabel}${adds}${obs} — R$ ${preco.toFixed(2)}</li>`;
 		}).join("");
 }
+// keep order total in sync
+updateOrderTotalUI();
 }
 
 
@@ -95,6 +99,7 @@ if(btnEnviarZap){
 		}catch(e){}
 		orderModal.style.display = 'flex';
 		const nameInput = document.getElementById('orderName');
+		updateOrderTotalUI();
 		if(nameInput) nameInput.focus();
 	});
 }
@@ -198,6 +203,7 @@ function limparCarrinho(){
 	CARRINHO = [];
 	salvarCarrinho();
 	atualizarCarrinhoUI();
+	updateOrderTotalUI();
 }
 
 const btnLimpar = document.getElementById('limparCarrinho');
@@ -234,66 +240,7 @@ if(btnContactWhats) btnContactWhats.addEventListener('click', ()=>{
 // inicializa UI
 atualizarCarrinhoUI();
 
-// --- Delivery fees / bairro select setup ---
-const entregaMap = {};
-	function loadDeliveryFees(){
-		const sel = document.getElementById('orderBairroSelect');
-		if(!sel) return;
-		fetch('assets/data/entrega.csv').then(r=>r.arrayBuffer()).then(buf=>{
-			let txt;
-			try{
-				txt = new TextDecoder('windows-1252').decode(buf);
-			}catch(e){
-				try{ txt = new TextDecoder('iso-8859-1').decode(buf); }catch(e2){ txt = new TextDecoder('utf-8').decode(buf); }
-			}
-			const lines = txt.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-			if(lines.length <= 1) return;
-			lines.shift(); // header
-			lines.forEach(line=>{
-				const parts = line.split(';');
-				const bairro = (parts[0]||'').trim();
-				const taxaRaw = (parts[1]||'').trim();
-				if(!bairro) return;
-				const key = bairro.toLowerCase();
-				entregaMap[key] = taxaRaw === '' ? null : taxaRaw.replace(',','.');
-				const opt = document.createElement('option');
-					opt.value = bairro;
-					if(entregaMap[key]){
-						const n = Number(entregaMap[key]);
-						opt.textContent = `${bairro} — R$ ${isNaN(n) ? entregaMap[key] : n.toFixed(2)}`;
-					} else {
-						opt.textContent = `${bairro} — consultar taxa de entrega`;
-					}
-				if(entregaMap[key]) opt.setAttribute('data-fee', entregaMap[key]);
-				else opt.setAttribute('data-fee','');
-				sel.appendChild(opt);
-			});
-			// only add an 'Outro' option if it doesn't already exist in the CSV
-			if(!sel.querySelector('option[value="Outro"]')){
-				const outroOpt = document.createElement('option');
-				outroOpt.value = 'Outro';
-				outroOpt.textContent = 'Outro';
-				outroOpt.setAttribute('data-fee','');
-				sel.appendChild(outroOpt);
-			}
-			// try to prefill bairro after options loaded
-			try{
-				const savedInfo = JSON.parse(localStorage.getItem('orderInfo')||'null');
-				if(savedInfo && savedInfo.bairro) setBairroValue(savedInfo.bairro);
-			}catch(e){}
-		}).catch(()=>{
-			if(!sel.querySelector('option[value="Outro"]')){
-				const outroOpt = document.createElement('option');
-				outroOpt.value = 'Outro';
-				outroOpt.textContent = 'Outro';
-				sel.appendChild(outroOpt);
-			}
-			try{
-				const savedInfo = JSON.parse(localStorage.getItem('orderInfo')||'null');
-				if(savedInfo && savedInfo.bairro) setBairroValue(savedInfo.bairro);
-			}catch(e){}
-		});
-	}
+// Delivery fees loaded by js/delivery.js (Delivery.loadFees)
 
 function updateBairroDisplay(selectedValue){
 	const feeSpan = document.getElementById('orderBairroFee');
@@ -320,6 +267,37 @@ function updateBairroDisplay(selectedValue){
 		feeSpan.innerHTML = '<strong style="color:#c00">consultar taxa de entrega</strong>';
 		otherWrap.style.display = 'none';
 	}
+	// update displayed total whenever bairro changes
+	updateOrderTotalUI();
+}
+
+// compute totals and update modal total UI
+function updateOrderTotalUI(){
+	const orderTotalValue = document.getElementById('orderTotalValue');
+	const orderTotalNote = document.getElementById('orderTotalNote');
+	if(!orderTotalValue) return;
+	const cartValue = CARRINHO.reduce((s,i)=>s+Number(i.preco),0);
+	const methodIsRetirada = (document.getElementById('orderMethodRetirada') && document.getElementById('orderMethodRetirada').checked);
+	let deliveryKnown = true;
+	let deliveryFeeValue = 0;
+	if(!methodIsRetirada){
+		const sel = document.getElementById('orderBairroSelect');
+		const otherWrap = document.getElementById('orderBairroOtherWrap');
+		if(otherWrap && otherWrap.style.display !== 'none'){
+			deliveryKnown = false;
+		} else if(sel){
+			const opt = sel.options[sel.selectedIndex];
+			if(!opt) deliveryKnown = false;
+			else {
+				const feeAttr = opt.getAttribute('data-fee');
+				if(!feeAttr || feeAttr === '') deliveryKnown = false;
+				else { const n = Number(feeAttr); if(!isNaN(n)) deliveryFeeValue = n; }
+			}
+		}
+	}
+	const total = cartValue + deliveryFeeValue;
+	orderTotalValue.textContent = Number(total).toFixed(2);
+	if(orderTotalNote) orderTotalNote.textContent = (methodIsRetirada ? '' : (deliveryKnown ? '' : '— consultar taxa de entrega'));
 }
 
 // toggle address fields based on method (entrega|retirada)
@@ -348,6 +326,8 @@ function toggleOrderMethod(){
 			otherWrap.style.display = (opt && opt.value === 'Outro') ? 'block' : 'none';
 		}
 	}
+	// refresh total when method changes
+	updateOrderTotalUI();
 }
 
 // wire method radios
@@ -388,8 +368,19 @@ const bairroSelect = document.getElementById('orderBairroSelect');
 if(bairroSelect){
 	bairroSelect.addEventListener('change', e=>{
 		updateBairroDisplay(e.target.value);
+		updateOrderTotalUI();
 	});
 }
 
 // load fees on startup
-loadDeliveryFees();
+// load fees via Delivery module
+if(window.Delivery && typeof window.Delivery.loadFees === 'function'){
+	Delivery.loadFees().then(()=>{
+		// try to prefill bairro after delivery options loaded
+		try{ const savedInfo = JSON.parse(localStorage.getItem('orderInfo')||'null'); if(savedInfo && savedInfo.bairro) setBairroValue(savedInfo.bairro); }catch(e){}
+		updateOrderTotalUI();
+	}).catch(()=>{});
+}
+
+// Update total UI when cart changes at initialization
+updateOrderTotalUI();

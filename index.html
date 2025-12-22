@@ -119,6 +119,9 @@
 				<div style="margin-top:8px" id="orderPontoWrap">
 					<label>Ponto de referência<br><input id="orderPonto" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
 				</div>
+				<div style="margin-top:8px;font-weight:700" id="orderTotal">
+					Total: R$ <span id="orderTotalValue">0.00</span> <small id="orderTotalNote" style="color:#c00;margin-left:8px"></small>
+				</div>
 				<div style="margin-top:8px;display:none" id="orderBairroOtherWrap">
 					<label>Outro bairro (digite)<br><input id="orderBairroOther" placeholder="Digite seu bairro" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
 				</div>
@@ -132,6 +135,9 @@
 
 <script src="js/produtos.js"></script>
 <script src="js/acrescimos.js"></script>
+<!-- PapaParse for CSV parsing -->
+<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+<script src="js/delivery.js"></script>
 <!-- IMAGE MODAL -->
 <div id="imageModal" class="image-modal" role="dialog" aria-hidden="true">
 	<div class="image-modal-backdrop" id="imageModalBackdrop"></div>
@@ -175,5 +181,6 @@
 </div>
 <script src="js/carrinho.js"></script>
 <script src="js/app.js"></script>
+            
 </body>
 </html>
