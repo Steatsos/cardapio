@@ -79,9 +79,19 @@ if(btnEnviarZap){
 				document.getElementById('orderName').value = saved.name || '';
 				document.getElementById('orderAddress').value = saved.address || '';
 				document.getElementById('orderComplemento').value = saved.complemento || '';
+				// set method (entrega|retirada)
+				try{
+					if(saved.method && saved.method === 'retirada'){
+						document.getElementById('orderMethodRetirada').checked = true;
+					} else {
+						document.getElementById('orderMethodEntrega').checked = true;
+					}
+				}catch(e){}
 				setBairroValue(saved.bairro || '');
 				document.getElementById('orderPonto').value = saved.ponto || '';
 			}
+			// apply method visibility
+			toggleOrderMethod();
 		}catch(e){}
 		orderModal.style.display = 'flex';
 		const nameInput = document.getElementById('orderName');
@@ -108,39 +118,67 @@ if(orderModal){
 			const address = (document.getElementById('orderAddress').value || '').trim();
 			const complemento = (document.getElementById('orderComplemento').value || '').trim();
 			const ponto = (document.getElementById('orderPonto').value || '').trim();
-			let bairro = '';
+				let bairro = '';
 			const otherWrap = document.getElementById('orderBairroOtherWrap');
 			if(otherWrap && otherWrap.style.display !== 'none'){
 				bairro = (document.getElementById('orderBairroOther').value || '').trim();
 				} else {
-					bairro = (document.getElementById('orderBairroSelect').value || '').trim();
+						bairro = (document.getElementById('orderBairroSelect').value || '').trim();
 				}
-			if(!name || !address){ alert('Por favor informe seu nome e endereço.'); return; }
+				const methodIsRetirada = (document.getElementById('orderMethodRetirada') && document.getElementById('orderMethodRetirada').checked);
+				if(!name || (!methodIsRetirada && !address)){ alert('Por favor informe seu nome e endereço.'); return; }
 
 			// save for next time
-			try{ localStorage.setItem('orderInfo', JSON.stringify({name,address,bairro,ponto,complemento})); }catch(e){}
+			try{ 
+				const method = (document.getElementById('orderMethodRetirada') && document.getElementById('orderMethodRetirada').checked) ? 'retirada' : 'entrega';
+				localStorage.setItem('orderInfo', JSON.stringify({name,address,bairro,ponto,complemento,method}));
+			}catch(e){}
 
 		const lines = formatOrderLines();
 		const cartValue = CARRINHO.reduce((s,i)=>s+Number(i.preco),0).toFixed(2);
 		let deliveryKnown = true;
-		const otherWrapCheck = document.getElementById('orderBairroOtherWrap');
-		if(otherWrapCheck && otherWrapCheck.style.display !== 'none'){
-			deliveryKnown = false;
+		if(methodIsRetirada){
+			deliveryKnown = true;
 		} else {
-			const sel = document.getElementById('orderBairroSelect');
-			if(sel){
-				const optSel = sel.options[sel.selectedIndex];
-				if(!optSel) deliveryKnown = false;
-				else {
-					const feeAttr = optSel.getAttribute('data-fee');
-					if(!feeAttr || feeAttr === '') deliveryKnown = false;
+			const otherWrapCheck = document.getElementById('orderBairroOtherWrap');
+			if(otherWrapCheck && otherWrapCheck.style.display !== 'none'){
+				deliveryKnown = false;
+			} else {
+				const sel = document.getElementById('orderBairroSelect');
+				if(sel){
+					const optSel = sel.options[sel.selectedIndex];
+					if(!optSel) deliveryKnown = false;
+					else {
+						const feeAttr = optSel.getAttribute('data-fee');
+						if(!feeAttr || feeAttr === '') deliveryKnown = false;
+					}
 				}
 			}
 		}
-		const total = `Total: R$ ${cartValue}`;
-		const totalForWhats = total + (deliveryKnown ? '' : ' — consultar taxa de entrega');
-		const header = `Pedido - ${name}`;
-			const footer = [`Endereço: ${address}${complemento? ' — ' + complemento : ''}`, `Bairro: ${bairro}`, `Ponto de referência: ${ponto}`];
+		let total = Number(cartValue);
+		let deliveryFeeValue = 0;
+		if(!methodIsRetirada && deliveryKnown){
+			const sel = document.getElementById('orderBairroSelect');
+			if(sel){
+				const optSel = sel.options[sel.selectedIndex];
+				const feeAttr = optSel && optSel.getAttribute('data-fee');
+				const n = feeAttr ? Number(feeAttr) : NaN;
+				if(!isNaN(n)){
+					deliveryFeeValue = n;
+					total += n;
+				}
+			}
+		}
+		const totalStr = `Total: R$ ${Number(total).toFixed(2)}`;
+		const totalForWhats = totalStr + (methodIsRetirada ? '' : (deliveryKnown ? '' : ' — consultar taxa de entrega'));
+		const header = methodIsRetirada ? `PEDIDO PARA RETIRAR - ${name}` : `PEDIDO DE ENTREGA - ${name}`;
+		let footer = [];
+		if(methodIsRetirada){
+			footer.push('Retirar na loja');
+			if(ponto) footer.push(`Ponto de referência: ${ponto}`);
+		} else {
+			footer = [`Endereço: ${address}${complemento? ' — ' + complemento : ''}`, `Bairro: ${bairro}`, `Ponto de referência: ${ponto}`];
+		}
 		const payload = [header, ...lines, '', totalForWhats, '', ...footer].join('\n');
 		const texto = encodeURIComponent(payload);
 		const url = `https://wa.me/5516996202763?text=${texto}`;
@@ -230,21 +268,26 @@ const entregaMap = {};
 				else opt.setAttribute('data-fee','');
 				sel.appendChild(opt);
 			});
-			const outroOpt = document.createElement('option');
-			outroOpt.value = 'Outro';
-			outroOpt.textContent = 'Outro';
-			outroOpt.setAttribute('data-fee','');
-			sel.appendChild(outroOpt);
+			// only add an 'Outro' option if it doesn't already exist in the CSV
+			if(!sel.querySelector('option[value="Outro"]')){
+				const outroOpt = document.createElement('option');
+				outroOpt.value = 'Outro';
+				outroOpt.textContent = 'Outro';
+				outroOpt.setAttribute('data-fee','');
+				sel.appendChild(outroOpt);
+			}
 			// try to prefill bairro after options loaded
 			try{
 				const savedInfo = JSON.parse(localStorage.getItem('orderInfo')||'null');
 				if(savedInfo && savedInfo.bairro) setBairroValue(savedInfo.bairro);
 			}catch(e){}
 		}).catch(()=>{
-			const outroOpt = document.createElement('option');
-			outroOpt.value = 'Outro';
-			outroOpt.textContent = 'Outro';
-			sel.appendChild(outroOpt);
+			if(!sel.querySelector('option[value="Outro"]')){
+				const outroOpt = document.createElement('option');
+				outroOpt.value = 'Outro';
+				outroOpt.textContent = 'Outro';
+				sel.appendChild(outroOpt);
+			}
 			try{
 				const savedInfo = JSON.parse(localStorage.getItem('orderInfo')||'null');
 				if(savedInfo && savedInfo.bairro) setBairroValue(savedInfo.bairro);
@@ -278,6 +321,40 @@ function updateBairroDisplay(selectedValue){
 		otherWrap.style.display = 'none';
 	}
 }
+
+// toggle address fields based on method (entrega|retirada)
+function toggleOrderMethod(){
+	const retirada = document.getElementById('orderMethodRetirada').checked;
+	const addressWrap = document.getElementById('orderAddressWrap');
+	const compWrap = document.getElementById('orderComplementoWrap');
+	const bairroWrap = document.getElementById('orderBairroWrap');
+	const pontoWrap = document.getElementById('orderPontoWrap');
+	const otherWrap = document.getElementById('orderBairroOtherWrap');
+	if(retirada){
+		if(addressWrap) addressWrap.style.display = 'none';
+		if(compWrap) compWrap.style.display = 'none';
+		if(bairroWrap) bairroWrap.style.display = 'none';
+		if(pontoWrap) pontoWrap.style.display = 'none';
+		if(otherWrap) otherWrap.style.display = 'none';
+	} else {
+		if(addressWrap) addressWrap.style.display = '';
+		if(compWrap) compWrap.style.display = '';
+		if(bairroWrap) bairroWrap.style.display = '';
+		if(pontoWrap) pontoWrap.style.display = '';
+		// otherWrap visibility controlled by bairro selection
+		if(otherWrap && document.getElementById('orderBairroSelect')){
+			const sel = document.getElementById('orderBairroSelect');
+			const opt = sel.options[sel.selectedIndex];
+			otherWrap.style.display = (opt && opt.value === 'Outro') ? 'block' : 'none';
+		}
+	}
+}
+
+// wire method radios
+const rbEntrega = document.getElementById('orderMethodEntrega');
+const rbRetirada = document.getElementById('orderMethodRetirada');
+if(rbEntrega) rbEntrega.addEventListener('change', toggleOrderMethod);
+if(rbRetirada) rbRetirada.addEventListener('change', toggleOrderMethod);
 
 function setBairroValue(saved){
 	const sel = document.getElementById('orderBairroSelect');

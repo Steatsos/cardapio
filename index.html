@@ -94,15 +94,21 @@
 				<button id="closeOrderModal" aria-label="Fechar">✕</button>
 				<h3 style="margin-top:0">Dados para entrega</h3>
 				<div style="margin-top:8px">
+					<label style="font-weight:600">Opção<br>
+						<label style="display:inline-block;margin-right:12px"><input type="radio" name="orderMethod" id="orderMethodEntrega" value="entrega" checked> Entrega</label>
+						<label style="display:inline-block"><input type="radio" name="orderMethod" id="orderMethodRetirada" value="retirada"> Retirar na loja</label>
+					</label>
+				</div>
+				<div style="margin-top:8px">
 					<label>Nome<br><input id="orderName" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
 				</div>
-				<div style="margin-top:8px">
+				<div style="margin-top:8px" id="orderAddressWrap">
 					<label>Endereço<br><input id="orderAddress" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
 				</div>
-				<div style="margin-top:8px">
+				<div style="margin-top:8px" id="orderComplementoWrap">
 					<label>Complemento<br><input id="orderComplemento" placeholder="Bloco, apartamento, outro" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
 				</div>
-				<div style="margin-top:8px">
+				<div style="margin-top:8px" id="orderBairroWrap">
 					<label>Bairro<br>
 						<select id="orderBairroSelect" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc">
 							<option value="">Selecione o bairro</option>
@@ -110,7 +116,7 @@
 						<div style="margin-top:6px;font-size:13px;color:#333"><span id="orderBairroFee"></span></div>
 					</label>
 				</div>
-				<div style="margin-top:8px">
+				<div style="margin-top:8px" id="orderPontoWrap">
 					<label>Ponto de referência<br><input id="orderPonto" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
 				</div>
 				<div style="margin-top:8px;display:none" id="orderBairroOtherWrap">
