@@ -14,15 +14,11 @@ body {
 
 
 header {
-	background: var(--brand-dark);
+    background: linear-gradient(150deg, #c3000a 0%, #6a010d 100%);
 	color: white;
 	padding: 15px;
 	text-align: center;
 }
-
-/* logo oval container */
-.logo-oval { display:inline-block; background:white; padding:12px 36px; border-radius:999px; box-shadow:0 10px 26px rgba(0,0,0,0.15); transform:translateY(-8px); }
-.logo-oval img { height:140px; display:block }
 
 /* MENU */
 nav {

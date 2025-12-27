@@ -1,52 +1,52 @@
-Categoria;Nome;Ingredientes;Preço Grande;Preço Junior
-Lanches de Hambúrguer;Misto Quente;Tomate, presunto e queijo;28;18
-Lanches de Hambúrguer;Burguer;Hambúrguer, queijo e tomate;28;18
-Lanches de Hambúrguer;Salada;Hambúrguer, queijo, tomate e alface;30;20
-Lanches de Hambúrguer;Hamburgão;Hambúrguer, presunto, ovo, queijo e tomate;33;22
-Lanches de Hambúrguer;Acebolado;Hambúrguer, queijo, tomate e cebola;31;21
-Lanches de Hambúrguer;Vegetariano;Queijo, ovo, milho, azeitona, alface, tomate e cebola;30;20
-Lanches de Hambúrguer;Milho;Hambúrguer, queijo, tomate e milho;31;21
-Lanches de Hambúrguer;Azeitonado;Hambúrguer, queijo, tomate e azeitona;32;22
-Lanches de Hambúrguer;Bacon;Hambúrguer, queijo, bacon e tomate;35;23
-Lanches de Hambúrguer;Calabresa;Hambúrguer, queijo, calabresa e tomate;32;22
-Lanches de Hambúrguer;Americano;Hambúrguer, alface, presunto, ovo, queijo e tomate;36;22
-Lanches de Hambúrguer;Catupiry;Hambúrguer, queijo, catupiry e tomate;36;24
-Lanches de Hambúrguer;Palmito;Hambúrguer, queijo, palmito e tomate;34;24
-Lanches de Hambúrguer;Cheddar;Hambúrguer, cheddar, queijo e tomate;32;22
-Lanches de Hambúrguer;Tudo;Hambúrguer, queijo, presunto, bacon, ovo, milho, azeitona, alface, tomate e cebola;39;25
-Lanches de Hambúrguer;A Moda;Hambúrguer, queijo, presunto, bacon, ovo, azeitona, milho, cebola, alface e tomate;42;28
-Lanches de Hambúrguer;3 Queijos;Hambúrguer, queijo, catupiry, cheddar e mussarela;36;23
-Lanches de Hambúrguer;Brócolis;Hambúrguer, brócolis, queijo, bacon e catupiry;36;24
-Lanches de Frango;Frango;Frango, queijo e tomate;30;23
-Lanches de Frango;Frango Salada;Frango, queijo, tomate e alface;32;22
-Lanches de Frango;Frango Acebolado;Frango, queijo, tomate e cebola;33;23
-Lanches de Frango;Frango Azeitonado;Frango, queijo, tomate e azeitona;33;23
-Lanches de Frango;Frango Milho;Frango, queijo, tomate e milho;33;23
-Lanches de Frango;Frango Bacon;Frango, queijo, bacon e tomate;35;23
-Lanches de Frango;Frango Americano;Frango, alface, presunto, ovo, queijo e tomate;35;23
-Lanches de Frango;Frango Catupiry;Frango, queijo, catupiry e tomate;37;24
-Lanches de Frango;Frango à Moda;Frango, queijo, presunto, bacon, ovo, milho, azeitona, alface e tomate;42;28
-Lanches de Frango;Frango Tudo;Frango, queijo, presunto, bacon, ovo, milho, azeitona, alface e tomate;40;28
-Lanches de Frango;Frango Especial;Frango, catupiry, milho, palmito, queijo e tomate;35;27
-Lanches de Lombo;Lombo;Lombo, queijo e tomate;33;23
-Lanches de Lombo;Lombo Salada;Lombo, queijo, tomate e alface;35;23
-Lanches de Lombo;Lombo Azeitonado;Lombo, queijo, tomate e azeitona;35;23
-Lanches de Lombo;Lombo Hambúrguer;Lombo, presunto, ovo, queijo e tomate;35;23
-Lanches de Lombo;Lombo Acebolado;Lombo, queijo, tomate e cebola;35;23
-Lanches de Lombo;Lombo Milho;Lombo, queijo, tomate e milho;35;23
-Lanches de Lombo;Lombo Bacon;Lombo, queijo, bacon e tomate;36;24
-Lanches de Lombo;Lombo Americano;Lombo, alface, presunto, ovo, queijo e tomate;36;24
-Lanches de Lombo;Lombo Catupiry;Lombo, queijo, catupiry e tomate;38;25
-Lanches de Lombo;Lombo Tudo;Lombo, queijo, presunto, bacon, ovo, azeitona, alface, tomate e milho;40;28
-Lanches de Lombo;Lombo à Moda;Lombo, queijo, presunto, bacon, ovo, azeitona, milho, alface, tomate e catupiry;42;29
-Lanches de Lombo;Contra Filé;Contra filé, queijo e tomate;39;26
-Lanches de Lombo;Contra Filé Tudo;Contra filé, queijo, presunto, bacon, ovo, milho, azeitona, alface, tomate e cebola;43;30
-Lanches de Lombo;Contra Filé Catupiry;Contra filé, queijo, catupiry e tomate;40;28
-Bauru;Linguiça;Pão francês, linguiça, queijo, cebola e tomate;32;-
-Bauru;Linguiça Apimentada;Pão francês, linguiça apimentada, queijo, cebola e tomate;33;-
-Bauru;Lombo;Pão francês, lombo, queijo, cebola e tomate;35;-
-Bauru;Frango;Pão francês, frango, queijo, cebola e tomate;33;-
-Bauru;Contra Filé;Pão francês, contra filé, queijo, cebola e tomate;34;-
+Categoria;Nome;Ingredientes;PreÃ§o Grande;PreÃ§o Junior
+Lanches;Misto Quente;Tomate, presunto e queijo;28;18
+Lanches;Burguer;HambÃºrguer, queijo e tomate;28;18
+Lanches;Salada;HambÃºrguer, queijo, tomate e alface;30;20
+Lanches;HamburgÃ£o;HambÃºrguer, presunto, ovo, queijo e tomate;33;22
+Lanches;Acebolado;HambÃºrguer, queijo, tomate e cebola;31;21
+Lanches;Vegetariano;Queijo, ovo, milho, azeitona, alface, tomate e cebola;30;20
+Lanches;Milho;HambÃºrguer, queijo, tomate e milho;31;21
+Lanches;Azeitonado;HambÃºrguer, queijo, tomate e azeitona;32;22
+Lanches;Bacon;HambÃºrguer, queijo, bacon e tomate;35;23
+Lanches;Calabresa;HambÃºrguer, queijo, calabresa e tomate;33;22
+Lanches;Americano;HambÃºrguer, alface, presunto, ovo, queijo e tomate;33;22
+Lanches;Catupiry;HambÃºrguer, queijo, catupiry e tomate;36;24
+Lanches;Palmito;HambÃºrguer, queijo, palmito e tomate;34;24
+Lanches;Cheddar;HambÃºrguer, cheddar, queijo e tomate;33;22
+Lanches;Tudo;HambÃºrguer, queijo, presunto, bacon, ovo, milho, azeitona, alface, tomate e cebola;39;27
+Lanches;A Moda;HambÃºrguer, queijo, presunto, bacon, ovo, azeitona, milho, cebola, alface e tomate;42;28
+Lanches;3 Queijos;HambÃºrguer, queijo, catupiry, cheddar e mussarela;36;23
+Lanches;Brocolis;HambÃºrguer, brocolis, queijo, bacon e catupiry;36;24
+Lanches;Frango;Frango, queijo e tomate;30;22
+Lanches;Frango Salada;Frango, queijo, tomate e alface;32;22
+Lanches;Frango Acebolado;Frango, queijo, tomate e cebola;33;23
+Lanches;Frango Azeitonado;Frango, queijo, tomate e azeitona;33;23
+Lanches;Frango Milho;Frango, queijo, tomate e milho;33;23
+Lanches;Frango Bacon;Frango, queijo, bacon e tomate;35;23
+Lanches;Frango Americano;Frango, alface, presunto, ovo, queijo e tomate;35;23
+Lanches;Frango Catupiry;Frango, queijo, catupiry e tomate;37;24
+Lanches;Frango a Moda;Frango, queijo, presunto, bacon, ovo, milho, azeitona, alface e tomate;42;28
+Lanches;Frango Tudo;Frango, queijo, presunto, bacon, ovo, milho, azeitona, alface e tomate;40;28
+Lanches;Frango Especial;Frango, catupiry, milho, palmito, queijo e tomate;38;27
+Lanches;Lombo;Lombo, queijo e tomate;33;23
+Lanches;Lombo Salada;Lombo, queijo, tomate e alface;35;23
+Lanches;Lombo Azeitonado;Lombo, queijo, tomate e azeitona;35;23
+Lanches;Lombo HamburguÃºr;Lombo, presunto, ovo, queijo e tomate;35;23
+Lanches;Lombo Acebolado;Lombo, queijo, tomate e cebola;35;23
+Lanches;Lombo Milho;Lombo, queijo, tomate e milho;35;23
+Lanches;Lombo Bacon;Lombo, queijo, bacon e tomate;36;24
+Lanches;Lombo Americano;Lombo, alface, presunto, ovo, queijo e tomate;36;24
+Lanches;Lombo Catupiry;Lombo, queijo, catupiry e tomate;38;25
+Lanches;Lombo Tudo;Lombo, queijo, presunto, bacon, ovo, azeitona, alface, tomate e milho;40;28
+Lanches;Lombo Ã  Moda;Lombo, queijo, presunto, bacon, ovo, azeitona, milho, alface, tomate e catupiry;42;29
+Lanches;Contra FilÃ©;Contra filÃ©, queijo e tomate;39;26
+Lanches;Contra FilÃ© Tudo;Contra filÃ©, queijo, presunto, bacon, ovo, milho, azeitona, alface, tomate e cebola;43;30
+Lanches;Contra FilÃ© Catupiry;Contra filÃ©, queijo, catupiry e tomate;40;28
+Bauru;LinguiÃ§a;PÃ£o francÃªs, linguiÃ§a, queijo, cebola e tomate;33;-
+Bauru;LinguiÃ§a Apimentada;PÃ£o francÃªs, linguiÃ§a apimentada, queijo, cebola e tomate;33;-
+Bauru;Lombo;PÃ£o francÃªs, lombo, queijo, cebola e tomate;35;-
+Bauru;Frango;PÃ£o francÃªs, frango, queijo, cebola e tomate;33;-
+Bauru;Contra FilÃ©;PÃ£o francÃªs, contra filÃ©, queijo, cebola e tomate;39;-
 Hot Dog;Dog Simples;-;16;-
 Hot Dog;Simples c/ Ovo;-;17;-
 Hot Dog;Duplo;-;17;-
@@ -59,11 +59,11 @@ Hot Dog;Dog Especial;-;27;-
 Hot Dog;Dog Frango Catupiry;-;28;-
 Hot Dog;Dog Presunto Mussarela;-;25;-
 Hot Dog;Dog Calabresa;-;25;
-Porções;Contra-filé;;58;45
-Porções;Lombo;;45;38
-Porções;Linguiça;;45;38
-Porções;Frango;;46;38
-Porções;Batata-Frita;;26;20
+PorÃ§Ãµes;Contra-filÃ©;;58;45
+PorÃ§Ãµes;Lombo;;45;38
+PorÃ§Ãµes;LinguiÃ§a;;45;38
+PorÃ§Ãµes;Frango;;46;38
+PorÃ§Ãµes;Batata-Frita;;26;20
 Bebidas;Coca Cola 2l;;15;
 Bebidas;Sabores 2l;;14;
 Bebidas;Coca Cola 600ml;;9;

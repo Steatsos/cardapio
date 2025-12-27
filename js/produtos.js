@@ -16,17 +16,13 @@ function parsePrice(v){
 function loadMenuCsv(){
 	return fetch('assets/data/menu.csv').then(r=>r.arrayBuffer()).then(buf=>{
 		// try UTF-8 first, fallback to windows-1252 if mojibake detected
-		let text;
-		try {
-			const dec = new TextDecoder('utf-8');
-			text = dec.decode(buf);
-		} catch(e){ text = null; }
-		if(!text || /�|Ã[\wÀ-ÿ]/.test(text)){
-			try{
-				const dec2 = new TextDecoder('windows-1252');
-				text = dec2.decode(buf);
-			}catch(e){ /* ignore */ }
+		let text = new TextDecoder('utf-8').decode(buf);
+
+		// se detectar caracteres quebrados (mojibake), usa windows-1252
+		if (/Ã.|�/.test(text)) {
+			text = new TextDecoder('windows-1252').decode(buf);
 		}
+
 		text = text || '';
 		const lines = text.split(/\r?\n/).filter(l=>l.trim());
 		const rows = lines.map(line => line.split(';'));

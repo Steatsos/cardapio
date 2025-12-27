@@ -176,13 +176,13 @@ if(orderModal){
 		}
 		const totalStr = `Total: R$ ${Number(total).toFixed(2)}`;
 		const totalForWhats = totalStr + (methodIsRetirada ? '' : (deliveryKnown ? '' : ' — consultar taxa de entrega'));
-		const header = methodIsRetirada ? `PEDIDO PARA RETIRAR - ${name}` : `PEDIDO DE ENTREGA - ${name}`;
+		const header = methodIsRetirada ? `PEDIDO PARA RETIRADA - ${name}` : `PEDIDO PARA ENTREGA - ${name}`;
 		let footer = [];
 		if(methodIsRetirada){
 			footer.push('Retirar na loja');
 			if(ponto) footer.push(`Ponto de referência: ${ponto}`);
 		} else {
-			footer = [`Endereço: ${address}${complemento? ' — ' + complemento : ''}`, `Bairro: ${bairro}`, `Ponto de referência: ${ponto}`];
+			footer = [`Endereço: ${address}${complemento? ' — ' + complemento : ''}` + `, ${bairro}` + `, ${ponto}`];
 		}
 		const payload = [header, ...lines, '', totalForWhats, '', ...footer].join('\n');
 		const texto = encodeURIComponent(payload);

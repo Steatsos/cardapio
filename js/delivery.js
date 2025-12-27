@@ -12,9 +12,10 @@
         try{
             const r = await fetch('assets/data/entrega.csv');
             const buf = await r.arrayBuffer();
-            let txt;
-            try{ txt = new TextDecoder('windows-1252').decode(buf); }
-            catch(e){ try{ txt = new TextDecoder('iso-8859-1').decode(buf);}catch(e2){ txt = new TextDecoder('utf-8').decode(buf);} }
+            let txt = new TextDecoder('utf-8').decode(buf);
+            if (/Ã.|�/.test(txt)) {
+                txt = new TextDecoder('windows-1252').decode(buf);
+            }
             const res = Papa.parse(txt, {header:true, delimiter:';', skipEmptyLines:true});
             // clear existing options (except the placeholder)
             const placeholder = sel.querySelector('option[value=""]');
