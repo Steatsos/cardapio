@@ -1,156 +1,187 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cardápio</title>
-<link rel="stylesheet" href="css/style.css">
-<link rel="icon" type="image" href="assets/img/logo.png">
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Cardápio</title>
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="icon" type="image" href="assets/img/icon.png">
 </head>
+
 <body>
-<header>
-		<a href="index.html" id="siteTitle"><img src="assets/img/logotexto.png" width="60%" alt="Logo"></a>
-</header>
+	<header>
+		<a href="index.html" id="siteTitle"><img src="assets/img/logo.png" width="20%" alt="Logo"></a>
+	</header>
 
-<!-- SIDEBAR (categorias) -->
-<aside id="sidebar" class="sidebar" aria-hidden="true">
-	<div class="sidebar-inner">
-		<button id="closeSidebar" aria-label="Fechar menu" class="sidebar-close">✕</button>
-		<h3 style="margin-top:0">Categorias</h3>
-		<ul id="sidebarCategorias"></ul>
+	<!-- SIDEBAR (categorias) -->
+	<aside id="sidebar" class="sidebar" aria-hidden="true">
+		<div class="sidebar-inner">
+			<button id="closeSidebar" aria-label="Fechar menu" class="sidebar-close">✕</button>
+			<h3 style="margin-top:0">Categorias</h3>
+			<ul id="sidebarCategorias"></ul>
 
-		<!-- Fale conosco section -->
-		<div style="margin-top:16px;border-top:1px solid #eee;padding-top:12px">
-			<h4 style="margin:0 0 8px 0">Fale conosco</h4>
-			<p style="margin:0 0 8px 0;font-size:13px;color:#555">Dúvidas? Entre em contato pelo WhatsApp.</p>
-			<a id="openWhatsLink" href="https://wa.me/5516996202763?text=Ol%C3%A1%2C%20gostaria%20de%20informa%C3%A7%C3%B5es" target="_blank" class="sidebar-contact-btn" style="display:inline-block;padding:8px 10px;border-radius:6px;border:0;background:var(--brand-mid);color:#fff;text-decoration:none">Contato</a>
-		</div>
-	</div>
-</aside>
-<div id="sidebarOverlay" class="sidebar-overlay" aria-hidden="true"></div>
- 
-<!-- BARRA DE BUSCA -->
-<div id="searchBar" style="padding:10px;text-align:center;display:flex;justify-content:center;gap:8px;align-items:center;">
-	<input id="searchInput" type="search" placeholder="Buscar produtos..." style="width:60%;padding:8px;border-radius:6px;border:1px solid #ccc"> 
-	<button id="openSidebar" aria-label="Abrir menu" style="padding:8px 10px;border-radius:6px;border:0;background:#333;color:#fff;">☰</button>
-	<button id="searchClear" style="padding:8px 10px;border-radius:6px;border:0;background:#333;color:#fff;">Limpar</button>
-</div>
-
-<!-- MENU DE CATEGORIAS -->
-<nav id="categorias" style="display:none;"></nav>
-
-<!-- INSTRUÇÃO -->
-<div style="padding:10px 12px;color:#444;font-size:14px">Para adicionar um lanche ao pedido, basta clicar no nome do lanche.</div>
-<!-- LISTA DE PRODUTOS DINÂMICA -->
-<div id="listaProdutos"></div>
-
-
-<!-- PAGINAÇÃO -->
-<div id="paginacao"></div>
-
-
-<!-- BOTÃO DO CARRINHO -->
-<div id="fabContainer" class="fab-container" style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
-	<button id="abrirCarrinho" class="fab-cart" style="background:var(--brand-dark);color:white;border:none;padding:12px;border-radius:999px;font-size:18px">🛒</button>
-</div>
-
-
-<!-- MODAL DO CARRINHO -->
-<div id="carrinhoModal">
-<div id="carrinhoBox">
-<h2>Seu Carrinho</h2>
-<ul id="listaCarrinho"></ul>
-<div style="display:flex;gap:8px;margin-top:10px">
-	<button id="enviarZap" style="padding:8px 12px;border-radius:6px;border:0;background:#25d366;color:#fff">Enviar pedido</button>
-	<button id="limparCarrinho" style="background:#e53e3e;color:#fff;border:none;padding:8px;border-radius:6px;">Limpar</button>
-</div>
-</div>
-</div>
-
-<!-- CONTACT MODAL -->
-<div id="contactModal" class="color-modal" role="dialog" aria-hidden="true">
-	<div class="color-modal-backdrop" id="contactModalBackdrop"></div>
-	<div class="color-modal-content" role="document">
-		<button id="closeContactModal" aria-label="Fechar">✕</button>
-		<h3 style="margin-top:0">Contato</h3>
-		<div style="margin-top:8px">
-			<label>Nome<br><input id="contactName" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
-		</div>
-		<!-- removed contact email field: user will send from their own address -->
-		<div style="margin-top:8px">
-			<label>Mensagem<br><textarea id="contactMessage" rows="4" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></textarea></label>
-		</div>
-		<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
-			<button id="contactSendWhatsApp" style="padding:8px 12px;border-radius:6px;border:0;background:#25d366;color:#fff">Enviar</button>
-		</div>
-	</div>
-</div>
-
-		<!-- ORDER DETAILS MODAL (collects customer data before sending WhatsApp) -->
-		<div id="orderModal" class="color-modal" role="dialog" aria-hidden="true" style="display:none">
-			<div class="color-modal-backdrop" id="orderModalBackdrop"></div>
-			<div class="color-modal-content" role="document">
-				<button id="closeOrderModal" aria-label="Fechar">✕</button>
-				<h3 style="margin-top:0">Dados para entrega</h3>
-				<div style="margin-top:8px">
-					<label style="font-weight:600">Opção<br>
-						<label style="display:inline-block;margin-right:12px"><input type="radio" name="orderMethod" id="orderMethodEntrega" value="entrega" checked> Entrega</label>
-						<label style="display:inline-block"><input type="radio" name="orderMethod" id="orderMethodRetirada" value="retirada"> Retirar na loja</label>
-					</label>
-				</div>
-				<div style="margin-top:8px">
-					<label>Nome<br><input id="orderName" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
-				</div>
-				<div style="margin-top:8px" id="orderAddressWrap">
-					<label>Endereço<br><input id="orderAddress" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
-				</div>
-				<div style="margin-top:8px" id="orderComplementoWrap">
-					<label>Complemento<br><input id="orderComplemento" placeholder="Bloco, apartamento, outro" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
-				</div>
-				<div style="margin-top:8px" id="orderBairroWrap">
-					<label>Bairro<br>
-						<select id="orderBairroSelect" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc">
-							<option value="">Selecione o bairro</option>
-						</select>
-						<div style="margin-top:6px;font-size:13px;color:#333"><span id="orderBairroFee"></span></div>
-					</label>
-				</div>
-				<div style="margin-top:8px" id="orderPontoWrap">
-					<label>Ponto de referência<br><input id="orderPonto" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
-				</div>
-				<div style="margin-top:8px;font-weight:700" id="orderTotal">
-					Total: R$ <span id="orderTotalValue">0.00</span> <small id="orderTotalNote" style="color:#c00;margin-left:8px"></small>
-				</div>
-				<div style="margin-top:8px;display:none" id="orderBairroOtherWrap">
-					<label>Outro bairro (digite)<br><input id="orderBairroOther" placeholder="Digite seu bairro" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
-				</div>
-				<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
-					<button id="orderCancel" style="padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:transparent">Cancelar</button>
-					<button id="orderSendWhats" style="padding:8px 12px;border-radius:6px;border:0;background:#25d366;color:#fff">Enviar pedido</button>
-				</div>
+			<!-- Fale conosco section -->
+			<div style="margin-top:16px;border-top:1px solid #eee;padding-top:12px">
+				<h4 style="margin:0 0 8px 0">Fale conosco</h4>
+				<p style="margin:0 0 8px 0;font-size:13px;color:#555">Dúvidas? Entre em contato pelo WhatsApp.</p>
+				<a id="openWhatsLink"
+					href="https://wa.me/5516996202763?text=Ol%C3%A1%2C%20gostaria%20de%20informa%C3%A7%C3%B5es"
+					target="_blank" class="sidebar-contact-btn"
+					style="display:inline-block;padding:8px 10px;border-radius:6px;border:0;background:#18b552;color:#fff;text-decoration:none">Contato</a>
 			</div>
 		</div>
+	</aside>
+	<div id="sidebarOverlay" class="sidebar-overlay" aria-hidden="true"></div>
 
-
-<script src="js/produtos.js"></script>
-<script src="js/acrescimos.js"></script>
-<!-- PapaParse for CSV parsing -->
-<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
-<script src="js/delivery.js"></script>
-<!-- IMAGE MODAL -->
-<div id="imageModal" class="image-modal" role="dialog" aria-hidden="true">
-	<div class="image-modal-backdrop" id="imageModalBackdrop"></div>
-	<div class="image-modal-content" role="document">
-		<button id="closeImageModal" aria-label="Fechar">✕</button>
-		<img id="imageModalImg" src="" alt="Imagem ampliada">
+	<!-- BARRA DE BUSCA -->
+	<div id="searchBar"
+		style="padding:10px;text-align:center;display:flex;justify-content:center;gap:8px;align-items:center;">
+		<input id="searchInput" type="search" placeholder="Buscar produtos..."
+			style="width:60%;padding:8px;border-radius:6px;border:1px solid #ccc">
+		<button id="openSidebar" aria-label="Abrir menu"
+			style="padding:8px 10px;border-radius:6px;border:0;background:#333;color:#fff;">☰</button>
+		<button id="searchClear"
+			style="padding:8px 10px;border-radius:6px;border:0;background:#333;color:#fff;">Limpar</button>
 	</div>
-</div>
-<!-- OBSERVAÇÕES MODAL (substitui seletor de cores) -->
-<div id="obsModal" class="color-modal" role="dialog" aria-hidden="true">
-	<div class="color-modal-backdrop" id="obsModalBackdrop"></div>
-	<div class="color-modal-content" role="document">
-		<button id="closeObsModal" aria-label="Fechar">✕</button>
-		<h3 style="margin-top:0">Observações do pedido</h3>
+
+	<!-- MENU DE CATEGORIAS -->
+	<nav id="categorias" style="display:none;"></nav>
+
+	<!-- INSTRUÇÃO -->
+	<div style="padding:10px 12px;color:#444;font-size:14px">Para adicionar um lanche ao pedido, basta clicar no nome do
+		lanche.</div>
+	<!-- LISTA DE PRODUTOS DINÂMICA -->
+	<div id="listaProdutos"></div>
+
+
+	<!-- PAGINAÇÃO -->
+	<div id="paginacao"></div>
+
+
+	<!-- BOTÃO DO CARRINHO -->
+	<div id="fabContainer" class="fab-container"
+		style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+		<button id="abrirCarrinho" class="fab-cart"
+			style="background:var(--brand-dark);color:white;border:none;padding:12px;border-radius:999px;font-size:18px">🛒</button>
+	</div>
+
+
+	<!-- MODAL DO CARRINHO -->
+	<div id="carrinhoModal">
+		<div id="carrinhoBox">
+			<h2>Seu Carrinho</h2>
+			<ul id="listaCarrinho"></ul>
+			<div style="display:flex;gap:8px;margin-top:10px">
+				<button id="enviarZap"
+					style="padding:8px 12px;border-radius:6px;border:0;background:#25d366;color:#fff">Enviar
+					pedido</button>
+				<button id="limparCarrinho"
+					style="background:#e53e3e;color:#fff;border:none;padding:8px;border-radius:6px;">Limpar</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- CONTACT MODAL -->
+	<div id="contactModal" class="color-modal" role="dialog" aria-hidden="true">
+		<div class="color-modal-backdrop" id="contactModalBackdrop"></div>
+		<div class="color-modal-content" role="document">
+			<button id="closeContactModal" aria-label="Fechar">✕</button>
+			<h3 style="margin-top:0">Contato</h3>
+			<div style="margin-top:8px">
+				<label>Nome<br><input id="contactName"
+						style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
+			</div>
+			<!-- removed contact email field: user will send from their own address -->
+			<div style="margin-top:8px">
+				<label>Mensagem<br><textarea id="contactMessage" rows="4"
+						style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></textarea></label>
+			</div>
+			<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+				<button id="contactSendWhatsApp"
+					style="padding:8px 12px;border-radius:6px;border:0;background:#25d366;color:#fff">Enviar</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- ORDER DETAILS MODAL (collects customer data before sending WhatsApp) -->
+	<div id="orderModal" class="color-modal" role="dialog" aria-hidden="true" style="display:none">
+		<div class="color-modal-backdrop" id="orderModalBackdrop"></div>
+		<div class="color-modal-content" role="document">
+			<button id="closeOrderModal" aria-label="Fechar">✕</button>
+			<h3 style="margin-top:0">Dados para entrega</h3>
+			<div style="margin-top:8px">
+				<label style="font-weight:600">Opção<br>
+					<label style="display:inline-block;margin-right:12px"><input type="radio" name="orderMethod"
+							id="orderMethodEntrega" value="entrega" checked> Entrega</label>
+					<label style="display:inline-block"><input type="radio" name="orderMethod" id="orderMethodRetirada"
+							value="retirada"> Retirar na loja</label>
+				</label>
+			</div>
+			<div style="margin-top:8px">
+				<label>Nome<br><input id="orderName"
+						style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
+			</div>
+			<div style="margin-top:8px" id="orderAddressWrap">
+				<label>Endereço<br><input id="orderAddress"
+						style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
+			</div>
+			<div style="margin-top:8px" id="orderComplementoWrap">
+				<label>Complemento<br><input id="orderComplemento" placeholder="Bloco, apartamento, outro"
+						style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
+			</div>
+			<div style="margin-top:8px" id="orderBairroWrap">
+				<label>Bairro<br>
+					<select id="orderBairroSelect"
+						style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc">
+						<option value="">Selecione o bairro</option>
+					</select>
+					<div style="margin-top:6px;font-size:13px;color:#333"><span id="orderBairroFee"></span></div>
+				</label>
+			</div>
+			<div style="margin-top:8px" id="orderPontoWrap">
+				<label>Ponto de referência<br><input id="orderPonto"
+						style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
+			</div>
+			<div style="margin-top:8px;font-weight:700" id="orderTotal">
+				Total: R$ <span id="orderTotalValue">0.00</span> <small id="orderTotalNote"
+					style="color:#c00;margin-left:8px"></small>
+			</div>
+			<div style="margin-top:8px;display:none" id="orderBairroOtherWrap">
+				<label>Outro bairro (digite)<br><input id="orderBairroOther" placeholder="Digite seu bairro"
+						style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></label>
+			</div>
+			<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+				<button id="orderCancel"
+					style="padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:transparent">Cancelar</button>
+				<button id="orderSendWhats"
+					style="padding:8px 12px;border-radius:6px;border:0;background:#25d366;color:#fff">Enviar
+					pedido</button>
+			</div>
+		</div>
+	</div>
+
+
+
+	<script src="js/produtos.js"></script>
+	<script src="js/acrescimos.js"></script>
+	<!-- PapaParse for CSV parsing -->
+	<script src="https://unpkg.com/papaparse@5.4.1/papaparse.min.js"></script>
+	<script src="js/delivery.js"></script>
+	<!-- IMAGE MODAL -->
+	<div id="imageModal" class="image-modal" role="dialog" aria-hidden="true">
+		<div class="image-modal-backdrop" id="imageModalBackdrop"></div>
+		<div class="image-modal-content" role="document">
+			<button id="closeImageModal" aria-label="Fechar">✕</button>
+			<img id="imageModalImg" src="" alt="Imagem ampliada">
+		</div>
+	</div>
+	<!-- OBSERVAÇÕES MODAL (substitui seletor de cores) -->
+	<div id="obsModal" class="color-modal" role="dialog" aria-hidden="true">
+		<div class="color-modal-backdrop" id="obsModalBackdrop"></div>
+		<div class="color-modal-content" role="document">
+			<button id="closeObsModal" aria-label="Fechar">✕</button>
+			<h3 style="margin-top:0">Observações do pedido</h3>
 			<div id="obsSizeOptions" style="margin-top:8px;display:none">
 				<label><input type="radio" name="obsSize" value="grande" checked> Grande</label>
 				<label style="margin-left:8px"><input type="radio" name="obsSize" value="jr"> Jr</label>
@@ -158,28 +189,46 @@
 
 			<!-- Acrescentar ingredientes (acréscimos) -->
 			<div style="margin-top:10px">
-				<button id="obsAddToggle" type="button" style="background:transparent;border:0;color:var(--brand-mid);font-weight:700;cursor:pointer;padding:6px 0">+ Acrescentar ingredientes</button>
-				<div id="obsAdditions" style="display:none;margin-top:8px;border:1px solid #eee;padding:8px;border-radius:6px;background:#fafafa">
+				<button id="obsAddToggle" type="button"
+					style="background:transparent;border:0;color:var(--brand-mid);font-weight:700;cursor:pointer;padding:6px 0">+
+					Acrescentar ingredientes</button>
+				<div id="obsAdditions"
+					style="display:none;margin-top:8px;border:1px solid #eee;padding:8px;border-radius:6px;background:#fafafa">
 					<div id="obsAdditionsList">Carregando ingredientes...</div>
-					<div style="margin-top:8px;text-align:right;font-size:14px;color:#333">Acrescimos: R$ <span id="obsAddTotal">0.00</span></div>
+					<div style="margin-top:8px;text-align:right;font-size:14px;color:#333">Acrescimos: R$ <span
+							id="obsAddTotal">0.00</span></div>
 				</div>
 			</div>
 
 			<div style="margin-top:8px">
 				<label>Observações (ex: sem cebola, trocar queijo)<br>
-				<textarea id="obsTextarea" rows="4" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></textarea></label>
+					<textarea id="obsTextarea" rows="4"
+						style="width:100%;padding:8px;border-radius:6px;border:1px solid #ccc"></textarea></label>
 			</div>
-		<div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;justify-content:flex-end">
-			<div style="text-align:right;font-weight:700">Total: R$ <span id="obsTotalValue">0.00</span></div>
-			<div style="display:flex;gap:8px;justify-content:flex-end">
-			<button id="cancelObs" style="padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:transparent">Cancelar</button>
-			<button id="confirmObs" style="padding:8px 12px;border-radius:6px;border:0;background:#333;color:#fff">Adicionar ao Pedido</button>
+			<div style="margin-top:12px;display:flex;flex-direction:column;gap:8px;justify-content:flex-end">
+				<div style="text-align:right;font-weight:700">Total: R$ <span id="obsTotalValue">0.00</span></div>
+				<div style="display:flex;gap:8px;justify-content:flex-end">
+					<button id="cancelObs"
+						style="padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:transparent">Cancelar</button>
+					<button id="confirmObs"
+						style="padding:8px 12px;border-radius:6px;border:0;background:#333;color:#fff">Adicionar ao
+						Pedido</button>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-<script src="js/carrinho.js"></script>
-<script src="js/app.js"></script>
-            
+	<script src="js/carrinho.js"></script>
+	<script src="js/app.js"></script>
+
+	<footer>
+		<img src="assets/img/logotexto.png" width="70%">
+		<div class="flex">
+			<a href="https://wa.me/5516996202763"><img src="assets/img/whatsapp.png" width="60px"></a>
+			<a href="https://www.ifood.com.br/delivery/sao-carlos-sp/barraquinha-lanches-vila-boa-vista-1/985619fc-71d5-4622-ab2b-cab308a45d6f"><img src="assets/img/ifood.png" width="70px"></a>
+			<a href="https://www.google.com.br/maps/place/Barraquinha+Lanches/@-22.0371582,-47.9041808,18.81z/data=!4m6!3m5!1s0x94b8776d13abf4bb:0x1f13d63742980f56!8m2!3d-22.0369819!4d-47.9037574!16s%2Fg%2F1tgb8g1l?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoASAFQAw%3D%3D"><img src="assets/img/maps.png" width="45px"></a>
+			<a href="https://www.instagram.com/barraquinhalanches/"><img src="assets/img/instagram.png" width="60px"></a>
+		</div>
+	</footer>
 </body>
+
 </html>

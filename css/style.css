@@ -14,9 +14,9 @@ body {
 
 
 header {
-    background: linear-gradient(150deg, #c3000a 0%, #6a010d 100%);
+    background: linear-gradient(15deg, #6e1017 0%, #000000 100%);
 	color: white;
-	padding: 15px;
+	padding: 2px;
 	text-align: center;
 }
 
@@ -24,7 +24,7 @@ header {
 nav {
 display: flex;
 overflow-x: auto;
-background: var(--brand-mid);
+background: var(--bg);
 }
 nav a {
 padding: 12px 20px;
@@ -172,3 +172,15 @@ color:white; border-radius:5px; font-size:16px;
 
 /* Sidebar contact button style */
 .sidebar-contact-btn { width:100%; text-align:left }
+
+/* Footer */
+footer {
+	background: black;
+	color: white;
+	text-align: center;
+}
+.flex {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+}
